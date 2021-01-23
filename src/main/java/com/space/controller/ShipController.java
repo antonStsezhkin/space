@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/rest")
@@ -103,11 +102,11 @@ public class ShipController {
 		if(id < 1){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		Optional<Ship> so = repository.findById(id);
-		if(!so.isPresent()){
+		Ship ship = repository.findById(id).orElse(null);
+		if(ship == null){
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(so.get(), HttpStatus.OK);
+		return new ResponseEntity<>(ship, HttpStatus.OK);
 	}
 
 	//UPDATE
@@ -116,11 +115,10 @@ public class ShipController {
 		if(id < 1){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		Optional<Ship> so = repository.findById(id);
-		if(!so.isPresent()){
+		Ship shipToEdit = repository.findById(id).orElse(null);
+		if(shipToEdit == null){
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		Ship shipToEdit = so.get();
 
 		if(!ShipUtils.prepareToUpdate(shipToEdit, ship)){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -135,13 +133,11 @@ public class ShipController {
 		if(id < 1){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		Optional<Ship> so = repository.findById(id);
-		Ship ship = repository.getOne(id);
-		if(!so.isPresent()){
+		Ship ship = repository.findById(id).orElse(null);
+		if(ship == null){
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		Ship shipToDelete = so.get();
-		repository.delete(shipToDelete);
+		repository.delete(ship);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
