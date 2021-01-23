@@ -104,7 +104,7 @@ public class ShipController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		Optional<Ship> so = repository.findById(id);
-		if(so.isEmpty()){
+		if(!so.isPresent()){
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(so.get(), HttpStatus.OK);
@@ -117,7 +117,7 @@ public class ShipController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		Optional<Ship> so = repository.findById(id);
-		if(so.isEmpty()){
+		if(!so.isPresent()){
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		Ship shipToEdit = so.get();
@@ -136,7 +136,8 @@ public class ShipController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		Optional<Ship> so = repository.findById(id);
-		if(so.isEmpty()){
+		Ship ship = repository.getOne(id);
+		if(!so.isPresent()){
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		Ship shipToDelete = so.get();
